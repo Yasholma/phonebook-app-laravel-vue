@@ -39,9 +39,12 @@
                             Log in
                         </router-link>
                     </div>
-                    <a v-else class="nav-item"
-                        >Welcome, {{ this.$root.$data.user.name }}</a
-                    >
+                    <div v-else>
+                        <a class="nav-item"
+                            >Welcome, {{ this.$root.$data.user.name }}</a
+                        >
+                        <a class="nav-item" @click="logoutUser">Logout</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -50,6 +53,25 @@
 
 <script>
 export default {
-    name: "Header"
+    name: "Header",
+    methods: {
+        logoutUser() {
+            axios
+                .post("/logout")
+                .then(res => {
+                    if (
+                        res.status === 200 &&
+                        this.$root.$data.isAuthenticated
+                    ) {
+                        this.$root.$data.isAuthenticated = false;
+                        this.$root.$data.user = {};
+                        this.$router.push("/");
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
+    }
 };
 </script>

@@ -2311,8 +2311,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "Header"
+  name: "Header",
+  methods: {
+    logoutUser: function logoutUser() {
+      var _this = this;
+
+      axios.post("/logout").then(function (res) {
+        if (res.status === 200 && _this.$root.$data.isAuthenticated) {
+          _this.$root.$data.isAuthenticated = false;
+          _this.$root.$data.user = {};
+
+          _this.$router.push("/");
+        }
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -2707,6 +2726,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.$router.push("phonebook");
       })["catch"](function (err) {
         console.log(err);
+        alert("Incorrect credentials");
       });
     }
   }
@@ -40630,8 +40650,19 @@ var render = function() {
                     ],
                     1
                   )
-                : _c("a", { staticClass: "nav-item" }, [
-                    _vm._v("Welcome, " + _vm._s(this.$root.$data.user.name))
+                : _c("div", [
+                    _c("a", { staticClass: "nav-item" }, [
+                      _vm._v("Welcome, " + _vm._s(this.$root.$data.user.name))
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "nav-item",
+                        on: { click: _vm.logoutUser }
+                      },
+                      [_vm._v("Logout")]
+                    )
                   ])
             ])
           ])
